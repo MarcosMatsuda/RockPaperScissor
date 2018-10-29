@@ -9,6 +9,8 @@
 import UIKit
 
 class PlayViewController: UIViewController {
+    
+    var message = (label: "", image: "")
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,67 +18,73 @@ class PlayViewController: UIViewController {
     
     @IBAction func paper(_ sender: Any) {
         
-        var message = (label: "", image: "")
-        
         let player1 = "paper"
         let player2 = enemyMovement()
         
-        print(player2)
-        
         if player1 == player2 {
-            message.label = "Empatou"
-            message.image = "itsATie"
+            self.message.label = "Empatou"
+            self.message.image = "itsATie"
         }else if player1 == "paper" && player2 == "scissor" {
-            message.label = "Perdeu"
-            message.image = "ScissorsCutPaper"
+            self.message.label = "Perdeu"
+            self.message.image = "ScissorsCutPaper"
         } else {
-            message.label = "Ganhou"
-            message.image = "PaperCoversRock"
+            self.message.label = "Ganhou"
+            self.message.image = "PaperCoversRock"
         }
         
         let controller: ResultViewController
         controller = storyboard?.instantiateViewController(withIdentifier: "ResultViewController") as! ResultViewController
         
-        controller.resultText = message.label
-        controller.image = message.image
+        controller.resultText = self.message.label
+        controller.imageOfResult = self.message.image
         present(controller, animated: true, completion: nil)
         
     }
     
-    @IBAction func rock(_ sender: Any) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        var message:(String, String)
-        let player1 = "rock"
         let player2 = enemyMovement()
         
-        //draw verify
-        if player1 == player2 {
-            message = (label: "Empatou", image: "itsATie")
-        }else if player1 == "rock" && player2 == "paper" {
-            //perdi
-            message = (label: "Perdeu", image: "PaperCoversRock")
-        }else {
-            //ganhei
-            message = (label: "Ganhou", image: "RockCrushesScissors")
+        if segue.identifier == "RockSegue" {
+        
+            let player1 = "rock"
+
+            if player1 == player2 {
+                self.message.label = "Empatou"
+                self.message.image = "itsATie"
+            }else if player1 == "rock" && player2 == "paper" {
+                self.message.label = "Perdeu"
+                self.message.image = "PaperCoversRock"
+            } else {
+                self.message.label = "Ganhou"
+                self.message.image = "RockCrushesScissors"
+            }
+
+            let controller = segue.destination as? ResultViewController
+            controller?.imageOfResult = self.message.image
+            controller?.resultText = self.message.label
+            
+        }else if segue.identifier == "ScissorSegue" {
+            let player1 = "rock"
+            if player1 == player2 {
+                self.message.label = "Empatou"
+                self.message.image = "itsATie"
+            }else if player1 == "scissor" && player2 == "rock" {
+                self.message.label = "Perdeu"
+                self.message.image = "RockCrushesScissors"
+            } else {
+                self.message.label = "Ganhou"
+                self.message.image = "ScissorsCutPaper"
+            }
+            
+            let controller = segue.destination as? ResultViewController
+            controller?.imageOfResult = self.message.image
+            controller?.resultText = self.message.label
         }
     }
     
-    @IBAction func scissor(_ sender: Any) {
-        
-        var message:(String, String)
-        let player1 = "scissor"
-        let player2 = enemyMovement()
-        
-        //draw verify
-        if player1 == player2 {
-            message = (label: "Empatou", image: "itsATie")
-        }else if player1 == "scissor" && player2 == "rock" {
-            //perdi
-            message = (label: "Perdeu", image: "RockCrushesScissors")
-        }else {
-            //ganhei
-            message = (label: "Ganhou", image: "ScissorsCutPaper")
-        }
+    @IBAction func scissor(_ sender: Any) {        
+        performSegue(withIdentifier: "ScissorSegue", sender: self)
     }
     
     private func enemyMovement() -> String{

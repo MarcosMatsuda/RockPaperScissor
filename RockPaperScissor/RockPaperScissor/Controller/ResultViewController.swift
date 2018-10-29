@@ -11,10 +11,11 @@ import UIKit
 class ResultViewController: UIViewController {
 
     var resultText: String?
-    var image: String?
+    var imageOfResult: String?
     
     @IBOutlet weak var result: UILabel!
     @IBOutlet weak var imageResult: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -27,8 +28,8 @@ class ResultViewController: UIViewController {
             result.text = resultText
         }
         
-        if let image = self.image {
-            
+        if let imageOfResult = self.imageOfResult {
+            imageResult.image = UIImage(named: imageOfResult)
         }
         
     }
@@ -36,6 +37,7 @@ class ResultViewController: UIViewController {
     @IBAction func playAgain(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
+    
     /*
     // MARK: - Navigation
 
